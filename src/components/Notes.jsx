@@ -14,7 +14,12 @@ function Notes() {
             body: 'Practice writing one handler for many inputs.'
         }
     ])
- 
+    
+    const [search, setSearch] = useState('')
+
+    const filteredNotes = notes.filter(note =>
+       note.title.toLowerCase().includes(search.toLowerCase())
+    )
     const [form, setForm] = useState({
         title: '',
         body: ''
@@ -54,7 +59,7 @@ function handleSubmit(event) {
 }
 
 function deleteNote(id) {
-  setNotes(notes.filter(note => note.id !== id))
+  setNotes(prevNotes => prevNotes.filter(note => note.id !== id))
 }
  
   return (
@@ -68,6 +73,8 @@ function deleteNote(id) {
                 <p className="mb-2 text-[13px] font-normal tracking-wide text-[#949494]">SEARCH</p>
                 <input
                     placeholder="Search by title"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
                     className="h-[52px] w-full border border-[#e6e6e6] px-4 text-lg outline-none placeholder:text-black/40 placeholder:italic focus:border-[#cf7d7d]"
                 />
             </div>
@@ -102,7 +109,7 @@ function deleteNote(id) {
  
             <ul className="grid grid-cols-3 items-start gap-5">
  
-            {notes.map((note) => (
+            {filteredNotes.map((note) => (
                 <li
                     key={note.id}
                     className="relative min-h-32 bg-white px-6 py-5 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]"
@@ -119,8 +126,8 @@ function deleteNote(id) {
             ))}
             </ul>
 
-            {notes.length === 0 && (
-                <p className="text-lg text-[#949494]">No notes found</p>
+            {filteredNotes.length === 0 && (
+                 <p className="text-lg text-[#949494]">No notes found</p>
             )}
         </section>
     </div>
